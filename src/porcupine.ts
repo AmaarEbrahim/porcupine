@@ -129,10 +129,12 @@ export function RunTests(functions: Array<() => void>) {
 
 	for (const f of functions) {
 		f();
-		const environment = getfenv(1);
-		if ("node" in environment) {
-			resultArray.push(environment.node as DescribeNode);
-			environment.node = undefined;
+
+		const node = getNodeFromEnvironment();
+
+		if (node) {
+			resultArray.push(node);
+			clearNodeFromEnvironment();
 		} else {
 			error(`Could not find \`node \` in the environment list!`);
 		}
